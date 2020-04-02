@@ -17,6 +17,31 @@ exports.postAddRoom = (req, res, next) => {
     });
 };
 
+exports.postEditRoom = (req, res, next) => {
+    const updatedRoomType = req.body.roomType;
+    const updatedNumOfBed = req.body.numOfBed;
+    const updatedPrice = req.body.price;
+    const updatedAvailableRoom = req.body.availableRoom;
+    Room.update({
+        roomType: updatedRoomType,
+        numOfBed: updatedNumOfBed,
+        price: updatedPrice,
+        availableRoom: updatedAvailableRoom
+        },
+        {
+        attributes: ['id', 'roomType'],
+        where: {roomType: updatedRoomType}
+        }
+    )
+    .then(result => {
+        console.log('Room Updated')
+        res.send('Room Updated')
+    })
+    .catch(err => {
+        console.log(err);
+    });
+};
+
 exports.postDeleteRoom = (req, res, next) => {
     const room = req.body.roomType
     Room.destroy({
