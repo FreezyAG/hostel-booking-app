@@ -4,9 +4,10 @@ const adminController = require('../controllers/admin');
 
 const router = express.Router();
 
-
+// /admin/add-room 
 router.post('/add-room', adminController.postAddRoom);
 
-router.post('/delete', adminController.postDeleteRoom);
+// /admin/delete-room
+router.post('/delete-room', adminController.postDeleteRoom);
 
 module.exports = router;
