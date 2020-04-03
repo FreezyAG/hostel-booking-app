@@ -1,11 +1,9 @@
 const Room = require('../models/room');
 const Booking = require('../models/booking');
+const io = require('../socket');
 
 exports.postCheckAvailableRoom = (req, res, next) => {
     const numOfGuests = req.body.numOfGuest;
-    const checkIn = req.body.checkIn;
-    const checkOut = req.body.checkOut;
-    const numOfNights = checkOut - checkIn;
 
     Room.findAll()
         .then(rooms => {
@@ -43,12 +41,19 @@ exports.postBookAvailableRoom = (req, res, next) => {
     })
     .then(() => {
         // find the booked room type
-        return Room.findAll({
+        let room = Room.findAll({
             attributes: ['id', 'roomType', 'availableRoom'],
             where: {roomType: room} })
+        // store the relevant room data
+        roomBooked = room[0].dataValues
+        // send a real time response to the admin from socket.io
+        io.getIO().emit('roomBooked', { action: 'booking-created', post: roomBooked})
+        
+        return roomBooked
     })
     .then(bookedRoom => {
         let result = bookedRoom[0].dataValues.availableRoom;
+
         // if today is not yet checkout date, reduce available room...
         // ...by one else booked room is now available
         if (Date.now() <= new Date(checkOut).getTime()) {
