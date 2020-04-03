@@ -1,6 +1,5 @@
 const Room = require('../models/room');
 
-
 exports.postAddRoom = (req, res, next) => {
     Room.create({
         roomType: req.body.roomType,
@@ -9,8 +8,12 @@ exports.postAddRoom = (req, res, next) => {
         availableRoom: req.body.availableRoom
     })
     .then(result => {
-        console.log('Room Created')
-        res.send('Room Created')
+        console.log('Room Created');
+        res.json({
+            error: false,
+            code: 200,
+            message: 'Room Created'
+        });
     })
     .catch(err => {
         console.log(err);
@@ -35,7 +38,11 @@ exports.postEditRoom = (req, res, next) => {
     )
     .then(result => {
         console.log('Room Updated')
-        res.send('Room Updated')
+        res.json({
+            error: false,
+            code: 200,
+            message: 'Room Updated'
+        });
     })
     .catch(err => {
         console.log(err);
@@ -48,8 +55,12 @@ exports.postDeleteRoom = (req, res, next) => {
         attributes: ['id', 'roomType',],
         where: {roomType: room} })
         .then(() => {
-            console.log('Room deleted')
-            res.send('Room deleted')
+            console.log('Room deleted');
+            res.json({
+                error: false,
+                code: 200,
+                message: 'Room deleted'
+            });
         })
         .catch(err => {
             console.log(err);
